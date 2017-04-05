@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="button.cpp" />
+    <ClCompile Include="console.cpp" />
+    <ClCompile Include="folder.cpp" />
+    <ClCompile Include="hint.cpp" />
+    <ClCompile Include="label.cpp" />
+    <ClCompile Include="listbox.cpp" />
+    <ClCompile Include="logger.cpp" />
+    <ClCompile Include="messagebox.cpp" />
+    <ClCompile Include="scrollbar.cpp" />
+    <ClCompile Include="switcher.cpp" />
+    <ClCompile Include="tree.cpp" />
+    <ClCompile Include="viewer.cpp" />
+    <ClCompile Include="window.cpp" />
+    <ClCompile Include="winmanager.cpp" />
+    <ClCompile Include="font.cpp" />
+    <ClCompile Include="outline.cpp" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="textbox.cpp" />
+    <ClCompile Include="radiogroup.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="button.h" />
+    <ClInclude Include="console.h" />
+    <ClInclude Include="folder.h" />
+    <ClInclude Include="hint.h" />
+    <ClInclude Include="label.h" />
+    <ClInclude Include="listbox.h" />
+    <ClInclude Include="logger.h" />
+    <ClInclude Include="messagebox.h" />
+    <ClInclude Include="scrollbar.h" />
+    <ClInclude Include="switcher.h" />
+    <ClInclude Include="tree.h" />
+    <ClInclude Include="viewer.h" />
+    <ClInclude Include="window.h" />
+    <ClInclude Include="winmanager.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="outline.h" />
+    <ClInclude Include="glwin.h" />
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="textbox.h" />
+    <ClInclude Include="radiogroup.h" />
+    <ClInclude Include="typedefs.h" />
+  </ItemGroup>
+</Project>

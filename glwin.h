@@ -1,0 +1,20 @@
+#pragma once
+
+#include <glwin/button.h>
+#include <glwin/camera.h>
+#include <glwin/console.h>
+#include <glwin/folder.h>
+#include <glwin/font.h>
+#include <glwin/hint.h>
+#include <glwin/label.h>
+#include <glwin/listbox.h>
+#include <glwin/logger.h>
+#include <glwin/messagebox.h>
+#include <glwin/outline.h>
+#include <glwin/scrollbar.h>
+#include <glwin/switcher.h>
+#include <glwin/textbox.h>
+#include <glwin/tree.h>
+#include <glwin/viewer.h>
+#include <glwin/window.h>
+#include <glwin/winmanager.h>
