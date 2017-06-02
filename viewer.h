@@ -4,9 +4,6 @@
 
 namespace GLWin{;
 
-class Label;
-class ListBox;
-
 class Viewer : public Window{
 public:
 	

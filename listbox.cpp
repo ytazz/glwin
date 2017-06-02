@@ -21,7 +21,7 @@ void ItemList::Add(const string& name){
 }
 
 void ItemList::Add(const wstring& name){
-	uint n = children.size();
+	uint n = (uint)children.size();
 	SetSplit(n+1, 1);
 	Button* btn = new Button(this);
 	btn->SetMargin(5.0f, 0.0f);

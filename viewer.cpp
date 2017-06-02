@@ -1,7 +1,6 @@
 #include <glwin/winmanager.h>
 #include <glwin/viewer.h>
-#include <glwin/label.h>
-#include <glwin/listbox.h>
+
 using namespace Scenebuilder;
 
 namespace GLWin{;
