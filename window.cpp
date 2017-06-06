@@ -152,38 +152,36 @@ void Window::Read(XMLNode* node){
 	
 	// 子ウィンドウ作成
 	for(int i = 0; ; i++) try{
-		ReadChild(node->GetNode(i));
-	}
-	catch(Exception&){ break; }
+		XMLNode* childNode = node->GetNode(i);
+		if(childNode->name == "import"){
+			// 別ファイルからインポート
+			string filename;
+			childNode->Get(filename, ".filename");
+			if(filename.empty())
+				continue;
 
-	// 別ファイルからインポート
-	for(int i = 0; ; i++) try{
-		XMLNode* importNode = node->GetNode("import", i);
+			try{
+				XML xml;
+				xml.Load(filename);
 
-		string filename;
-		importNode->Get(filename, ".filename");
-		if(filename.empty())
-			continue;
+				// importタグのfilename以外の属性を移す
+				XMLNode* rootNode = xml.GetRootNode();
+				for(XMLNode::Attrs::iterator it = childNode->attrs.begin(); it != childNode->attrs.end(); it++){
+					if(it->first != "filename")
+						rootNode->SetAttr(it->first, it->second);
+				}
 
-		try{
-			XML xml;
-			xml.Load(filename);
-
-			// importタグのfilename以外の属性を移す
-			XMLNode* rootNode = xml.GetRootNode();
-			for(XMLNode::Attrs::iterator it = importNode->attrs.begin(); it != importNode->attrs.end(); it++){
-				if(it->first != "filename")
-					rootNode->SetAttr(it->first, it->second);
+				ReadChild(rootNode);
 			}
-
-			ReadChild(rootNode);
+			catch(Exception&){
+				Message::Error("glwin: error occurred while parsing %s", filename.c_str());
+			}
 		}
-		catch(Exception&){
-			Message::Error("glwin: error occurred while parsing %s", filename.c_str());
+		else{
+			ReadChild(childNode);
 		}
 	}
 	catch(Exception&){ break; }
-
 }
 
 void Window::ReadChild(XMLNode* node){
@@ -191,10 +189,6 @@ void Window::ReadChild(XMLNode* node){
 	if(node->name == "group"){
 		RadioGroup* group = new RadioGroup(this);
 		group->Read(node);
-		return;
-	}
-	// Import
-	if(node->name == "import"){
 		return;
 	}
 
