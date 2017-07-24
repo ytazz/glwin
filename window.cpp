@@ -5,6 +5,7 @@
 
 #include <sbmessage.h>
 #include <sbtokenizer.h>
+#include <sbimagepng.h>
 using namespace Scenebuilder;
 
 #include <Foundation/UTPreciseTimer.h>
@@ -49,6 +50,7 @@ Window::Window(Window* p){
 	backListId  = -1;
 	frameListId = -1;
 	textListId  = -1;
+	backTexId   = -1;
 
 	itemReady = 0;
 
@@ -138,6 +140,7 @@ void Window::Read(XMLNode* node){
 	if(node->Get(s , ".text"           )) SetText          (s);
 	if(node->Get(s , ".hint"           )) SetHint          (s);
 	if(node->Get(s , ".back_color"     )) SetBackColor     (s);
+	if(node->Get(s , ".back_image"     )) SetBackImage     (s);
 	if(node->Get(s , ".frame_color"    )) SetFrameColor    (s);
 	if(node->Get(s , ".text_color"     )) SetTextColor     (s);
 	if(node->Get(s , ".font_face"      )) SetFontFace      (s);
@@ -146,6 +149,8 @@ void Window::Read(XMLNode* node){
 	if(node->Get(b , ".vscroll"        )) SetVScroll       (b);
 	if(node->Get(f , ".scrollbar_width")) SetScrollbarWidth(f);
 	if(node->Get(f2, ".margin"         )) SetMargin        (f2.x, f2.y);
+	if(node->Get(f2, ".pos"            )) SetPosition      (f2.x, f2.y);
+	if(node->Get(f2, ".size"           )) SetSize          (f2.x, f2.y);
 	if(node->Get(s , ".align"          )) SetAlign         (Align::FromString(s));
 	if(node->Get(s , ".contents_align" )) SetContentsAlign (Align::FromString(s));
 	if(node->Get(f2, ".panel"          )) AssignPanel      ((int)f2.x, (int)f2.y);
@@ -318,6 +323,11 @@ void Window::SetTextColor(const string& c){
 	SetReady(Item::Font , false);
 }
 
+void Window::SetBackImage(const string& filename){
+	backImage = filename;
+	SetReady(Item::Image, false);
+}
+
 void Window::SetText(const wstring& t){
 	text = t;
 	SetReady(Item::Text, false);
@@ -468,6 +478,28 @@ bool Window::Prepare(int mask){
 		// フォントサイズが変わっている場合に必要
 		SetReady(Item::ContentsPos, false);
 	}
+
+	if((mask & Item::Image) && !IsReady(Item::Image)){
+		if(backTexId != -1){
+			glDeleteTextures(1, (GLuint*)&backTexId);
+			backTexId = -1;
+		}
+
+		ImagePNG image;
+		if(image.Load(backImage)){
+			// テクスチャ生成
+			glGenTextures(1, (GLuint*)&backTexId);
+			glBindTexture  (GL_TEXTURE_2D, backTexId);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR/*GL_NEAREST*/);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR/*GL_NEAREST*/);
+			glTexImage2D   (GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image.pixels[0]);
+			glBindTexture  (GL_TEXTURE_2D, 0);
+		}
+		
+		SetReady(Item::Image, true);
+
+		SetReady(Item::Rect, false);
+	}
 	
 	if((mask & Item::Rect) && !IsReady(Item::Rect)){
 		GRRenderIf* render = manager->render;
@@ -475,28 +507,42 @@ bool Window::Prepare(int mask){
 		// ピクセルの中心を頂点とする
 		float w = szWindow.x;
 		float h = szWindow.y;
-		Vec3f vertices[4];
+
+		struct V3{
+			Vec3f pos;
+		};
+		struct T2V3{
+			Vec2f tex;
+			Vec3f pos;
+		};
+		V3   v3  [4];
+		T2V3 t2v3[4];
+
 		// 背景: 頂点座標で始点と終点が[i,j]とすると[i,j)のピクセルがフィルされる．yは反転してるので注意
-		vertices[0] = Vec3f(    0.5f,   + 0.5f, 0.0f);
-		vertices[1] = Vec3f(    0.5f, h + 0.5f, 0.0f);
-		vertices[2] = Vec3f(w + 0.5f, h + 0.5f, 0.0f);
-		vertices[3] = Vec3f(w + 0.5f,   + 0.5f, 0.0f);
+		t2v3[0].tex = Vec2f(0.0f, 0.0f);
+		t2v3[1].tex = Vec2f(0.0f, 1.0f);
+		t2v3[2].tex = Vec2f(1.0f, 1.0f);
+		t2v3[3].tex = Vec2f(1.0f, 0.0f);
+		t2v3[0].pos = Vec3f(    0.5f,   + 0.5f, 0.0f);
+		t2v3[1].pos = Vec3f(    0.5f, h + 0.5f, 0.0f);
+		t2v3[2].pos = Vec3f(w + 0.5f, h + 0.5f, 0.0f);
+		t2v3[3].pos = Vec3f(w + 0.5f,   + 0.5f, 0.0f);
 		if(backListId != -1)
 			render->ReleaseList(backListId);
 		backListId = render->StartList();
-		glInterleavedArrays(GL_V3F, sizeof(Vec3f), vertices);
+		glInterleavedArrays(GL_T2F_V3F, sizeof(T2V3), t2v3);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 		render->EndList();
 
 		// 枠: 始点と終点を[i,j]とすると[i,j]がフィルされる
-		vertices[0] = Vec3f(0.5f,     0.5f,     0.0f);
-		vertices[1] = Vec3f(0.5f,     h - 0.5f, 0.0f);
-		vertices[2] = Vec3f(w - 0.5f, h - 0.5f, 0.0f);
-		vertices[3] = Vec3f(w - 0.5f, 0.5f,     0.0f);
+		v3[0].pos = Vec3f(0.5f,     0.5f,     0.0f);
+		v3[1].pos = Vec3f(0.5f,     h - 0.5f, 0.0f);
+		v3[2].pos = Vec3f(w - 0.5f, h - 0.5f, 0.0f);
+		v3[3].pos = Vec3f(w - 0.5f, 0.5f,     0.0f);
 		if(frameListId != -1)
 			render->ReleaseList(frameListId);
 		frameListId = render->StartList();
-		glInterleavedArrays(GL_V3F, sizeof(Vec3f), vertices);
+		glInterleavedArrays(GL_V3F, sizeof(V3), v3);
 		glDrawArrays(GL_LINE_LOOP, 0, 4);
 		render->EndList();
 		
@@ -698,7 +744,15 @@ void Window::DrawBack(){
 	Vec4f c = CalcBackColor();
 	if(c.w != 0.0f){
 		SetColor(c);
+		if(backTexId != -1){
+			render->SetTexture2D(true);
+			glBindTexture(GL_TEXTURE_2D, backTexId);
+		}
 		render->DrawList(backListId);
+		if(backTexId != -1){
+			glBindTexture(GL_TEXTURE_2D, 0);
+			render->SetTexture2D(false);
+		}
 	}
 }
 

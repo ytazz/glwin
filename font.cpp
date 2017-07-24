@@ -74,7 +74,8 @@ int PowerOfTwo(int x){
 bool Font::Init(){
 	// フォントをロード
 	//string fontdir = "fonts/";
-	string fontdir = "c:\\windows\\fonts\\";
+	//string fontdir = "c:\\windows\\fonts\\";
+	string fontdir = "";
 	string path = fontdir + name;
 	font = TTF_OpenFont(path.c_str(), size);
 	if(!font){

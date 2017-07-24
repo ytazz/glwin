@@ -91,7 +91,8 @@ public:
 			Layout      = 0x1 << 4,
 			ContentsPos = 0x1 << 5,
 			ScrollRange = 0x1 << 6,
-			End         = 0x1 << 7,
+			Image       = 0x1 << 7,
+			End         = 0x1 << 8,
 			All         = 0xffff,
 		};
 	};
@@ -123,6 +124,7 @@ public:
 	Vec2f			margin;
 	string			frameColor;		///< 枠の色
 	string			backColor;		///< 背景の色
+	string          backImage;      ///< 背景の画像
 	string			textColor;		///< 文字の色
 	wstring			text;			///< テキスト
 	wstring			hint;			///< ヒント文字列
@@ -146,6 +148,7 @@ public:
 	int				textListId;		///< テキストのディスプレイリスト
 	int				backListId;		///< 背景のディスプレイリスト
 	int				frameListId;	///< 枠のディスプレイリスト
+	int             backTexId;
 	Vec2f			contentsPos;
 
 	/// 整列管理
@@ -232,6 +235,8 @@ public:
 	void	SetFrameColor(const string& c);
 	void	SetBackColor (const string& c);
 	void	SetTextColor (const string& c);
+	// 画像
+	void    SetBackImage(const string& filename);
 	// フォント
 	void    SetFontFace(const string& face);
 	void	SetFontSize(int sz);
