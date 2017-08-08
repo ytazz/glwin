@@ -38,6 +38,7 @@ void Font::Glyph::Draw(GRRenderIf* render, Vec2f pos){
 	float hf = (float)h;
 
 	render->SetTexture2D(true);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, texId);
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0.0f, vmax); glVertex2f(pos.x + xf,      pos.y - yf     );
@@ -77,8 +78,9 @@ bool Font::Init(){
 	//string fontdir = "c:\\windows\\fonts\\";
 	string fontdir = "";
 	string path = fontdir + name;
-	font = TTF_OpenFont(path.c_str(), size);
-	if(!font){
+	if( !(font = TTF_OpenFont( name                           .c_str(), size)) &&
+		!(font = TTF_OpenFont( ("fonts\\" + name)             .c_str(), size)) &&
+		!(font = TTF_OpenFont( ("c:\\windows\\fonts\\" + name).c_str(), size)) ){
 		Message::Error("failed to load font %s:%d", name.c_str(), size);
 		return false;
 	}

@@ -486,7 +486,7 @@ bool Window::Prepare(int mask){
 		}
 
 		ImagePNG image;
-		if(image.Load(backImage)){
+		if(!backImage.empty() && image.Load(backImage)){
 			// テクスチャ生成
 			glGenTextures(1, (GLuint*)&backTexId);
 			glBindTexture  (GL_TEXTURE_2D, backTexId);
@@ -746,6 +746,7 @@ void Window::DrawBack(){
 		SetColor(c);
 		if(backTexId != -1){
 			render->SetTexture2D(true);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBindTexture(GL_TEXTURE_2D, backTexId);
 		}
 		render->DrawList(backListId);
@@ -824,9 +825,12 @@ void Window::Layout(){
 	panels.resize(nrow * ncol);
 	
 	// スクロールバーが表示されている場合はコンテンツサイズ，それ以外の場合はウィンドウサイズを基準にレイアウトする
-	float w = (hscroll ? szContents.x : szWindow.x);
-	float h = (vscroll ? szContents.y : szWindow.y);
+	float wrect = (hscroll ? szContents.x : szWindow.x);
+	float hrect = (vscroll ? szContents.y : szWindow.y);
 	
+	float w = wrect;
+	float h = hrect;
+
 	// まずマージンを差し引く
 	w -= margin.x * (1 + ncol);
 	h -= margin.y * (1 + nrow);
@@ -910,56 +914,62 @@ void Window::Layout(){
 			continue;
 		}
 
+		Rect rc;
+		Vec2f sz  = child->GetSize    ();
+		Vec2f pos = child->GetPosition(); 
+		
 		// その他子ウィンドウの配置
 		if(child->align == Align::Absolute){
-			child->SetReady(Item::Rect  , false);
-			child->SetReady(Item::Layout, false);
-			continue;
+			rc.left   = (pos.x > 1.0f ? pos.x : w * pos.x);
+			rc.top    = (pos.y > 1.0f ? pos.y : h * pos.y);
+			rc.right  = rc.left + (sz.x > 1.0f ? sz.x : w * sz.x);
+			rc.bottom = rc.top  + (sz.y > 1.0f ? sz.y : h * sz.y);
 		}
-		
-		uint idx = child->rowIdx * ncol + child->colIdx;
-		// 割当て位置がパネルの範囲外
-		if(idx >= panels.size()){
-			child->SetPosition(0.0f, 0.0f);
-			child->SetSize(0.0f, 0.0f);
-			continue;
-		}
+		else{
+			uint idx = child->rowIdx * ncol + child->colIdx;
+			// 割当て位置がパネルの範囲外
+			if(idx >= panels.size()){
+				rc.left   = 0.0f;
+				rc.top    = 0.0f;
+				rc.right  = 0.0f;
+				rc.bottom = 0.0f;
+			}
+			else{
+				Rect& pnl = panels[idx];
 
-		Rect rc;
-		Vec2f sz = child->GetSize();
-		Rect& pnl = panels[idx];
-
-		if(child->align & Align::HFit){
-			rc.left  = pnl.left;
-			rc.right = pnl.right;
-		}
-		if(child->align & Align::HCenter){
-			rc.left  = pnl.HCenter() - 0.5f * sz.x;
-			rc.right = pnl.HCenter() + 0.5f * sz.x;
-		}
-		if(child->align & Align::Left){
-			rc.left  = pnl.left;
-			rc.right = pnl.left + sz.x;
-		}
-		if(child->align & Align::Right){
-			rc.left  = pnl.right - sz.x;
-			rc.right = pnl.right;
-		}
-		if(child->align & Align::VFit){
-			rc.top    = pnl.top;
-			rc.bottom = pnl.bottom;
-		}
-		if(child->align & Align::VCenter){
-			rc.top    = pnl.VCenter() - 0.5f * sz.y;
-			rc.bottom = pnl.VCenter() + 0.5f * sz.y;
-		}
-		if(child->align & Align::Top){
-			rc.top    = pnl.top;
-			rc.bottom = pnl.top + sz.y;
-		}
-		if(child->align & Align::Bottom){
-			rc.top    = pnl.bottom - sz.y;
-			rc.bottom = pnl.bottom;
+				if(child->align & Align::HFit){
+					rc.left  = pnl.left;
+					rc.right = pnl.right;
+				}
+				if(child->align & Align::HCenter){
+					rc.left  = pnl.HCenter() - 0.5f * sz.x;
+					rc.right = pnl.HCenter() + 0.5f * sz.x;
+				}
+				if(child->align & Align::Left){
+					rc.left  = pnl.left;
+					rc.right = pnl.left + sz.x;
+				}
+				if(child->align & Align::Right){
+					rc.left  = pnl.right - sz.x;
+					rc.right = pnl.right;
+				}
+				if(child->align & Align::VFit){
+					rc.top    = pnl.top;
+					rc.bottom = pnl.bottom;
+				}
+				if(child->align & Align::VCenter){
+					rc.top    = pnl.VCenter() - 0.5f * sz.y;
+					rc.bottom = pnl.VCenter() + 0.5f * sz.y;
+				}
+				if(child->align & Align::Top){
+					rc.top    = pnl.top;
+					rc.bottom = pnl.top + sz.y;
+				}
+				if(child->align & Align::Bottom){
+					rc.top    = pnl.bottom - sz.y;
+					rc.bottom = pnl.bottom;
+				}
+			}
 		}
 		child->SetRect(rc.left, rc.top, rc.Width(), rc.Height());
 	}

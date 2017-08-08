@@ -185,6 +185,7 @@
     <ClInclude Include="messagebox.h" />
     <ClInclude Include="outline.h" />
     <ClInclude Include="radiogroup.h" />
+    <ClInclude Include="rect.h" />
     <ClInclude Include="scrollbar.h" />
     <ClInclude Include="switcher.h" />
     <ClInclude Include="textbox.h" />
