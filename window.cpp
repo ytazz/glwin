@@ -86,7 +86,7 @@ Window::Window(Window* p){
 	SetFrameColor((manager && manager->root) ? manager->root->frameColor : "white"    );
 	SetTextColor ((manager && manager->root) ? manager->root->textColor  : "white"    );
 	SetFontFace  ((manager && manager->root) ? manager->root->fontFace   : "arial.ttf");
-	SetFontSize  ((manager && manager->root) ? manager->root->fontSize   : 18         );
+	SetFontSize  ((manager && manager->root) ? manager->root->fontSize   : 16         );
 	
 	if(parent){
 		parent->AddChild(this);

@@ -22,7 +22,6 @@ public:
 	int			curLogIdx;		///< 表示した最後のメッセージの番号
 	string		errorColor;		///< エラーメッセージの色
 	Font*		errorFont;		///< エラーメッセージ用フォント
-	int	        logListId;		///< ログ描画用ディスプレイリスト
 	int 		logTexId;		///< ログ描画用テクスチャ
 	int 		logBufId;		///< ログ描画用フレームバッファ
 	float		logWidth;

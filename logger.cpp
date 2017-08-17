@@ -18,7 +18,6 @@ Logger::Logger(Window* p):Window(p){
 	errorFont  = 0;
 	curLogIdx  = -1;
 
-	logListId = 0;
 	logTexId  = 0;
 	logBufId  = 0;
 
