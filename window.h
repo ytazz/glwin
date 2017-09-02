@@ -145,7 +145,9 @@ public:
 	Font*			font;			///< フォント
 	vector<wstring>	textLines;		///< 複数行に分解したテキスト
 	Vec2f			szText;			///< テキスト領域のサイズ
-	int				textListId;		///< テキストのディスプレイリスト
+	//int				textListId;		///< テキストのディスプレイリスト
+	int             textTexId;
+	int             textBufId;
 	int				backListId;		///< 背景のディスプレイリスト
 	int				frameListId;	///< 枠のディスプレイリスト
 	int             backTexId;

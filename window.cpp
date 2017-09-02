@@ -49,7 +49,9 @@ Window::Window(Window* p){
 
 	backListId  = -1;
 	frameListId = -1;
-	textListId  = -1;
+	//textListId  = -1;
+	textTexId   = -1;
+	textBufId   = -1;
 	backTexId   = -1;
 
 	itemReady = 0;
@@ -583,11 +585,58 @@ bool Window::Prepare(int mask){
 			for(uint i = 0; i < textLines.size(); i++){
 				font->GetMetric(textLines[i], advance, ascent, descent);
 				szText.x  = std::max(szText.x, advance);
-				szText.y += (ascent - descent);//fontSize;
+				szText.y += (ascent - descent);
 			}
 
-			// テキスト描画用ディスプレイリスト
+			// テクスチャ作成
+			if(textTexId != 0)
+				glDeleteTextures(1, (GLuint*)&textTexId);
+			glGenTextures       (1, (GLuint*)&textTexId);
+			glBindTexture  (GL_TEXTURE_2D, textTexId);
+			glTexImage2D   (GL_TEXTURE_2D, 0, GL_RGBA, (size_t)szText.x, (size_t)szText.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+			// フレームバッファ作成
+			if(textBufId != 0)
+				glDeleteFramebuffers(1, (GLuint*)&textBufId);
+			glGenFramebuffers       (1, (GLuint*)&textBufId);
+
+			// フレームバッファにテクスチャをバインド
+			glBindFramebuffer(GL_FRAMEBUFFER, textBufId);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textTexId, 0);
+
+			// ビューポートと投影変換
+			Vec2f   vpPos  = render->GetViewportPos ();
+			Vec2f   vpSize = render->GetViewportSize();
+			Affinef affProjTmp;
+			render->GetProjectionMatrix(affProjTmp);
+
+			float w = szText.x;
+			float h = szText.y;
+			Affinef affProj;
+			affProj.item(0,0) =  2.0f / w;
+			affProj.item(1,1) = -2.0f / h;
+			affProj.item(2,2) = -1.0f;
+			affProj.item(3,3) =  1.0f;
+			affProj.item(0,3) = -1.0f;
+			affProj.item(1,3) =  1.0f;
+			render->SetViewport(Vec2f(), Vec2f(w, h));
+			render->SetProjectionMatrix(affProj);
+
 			Vec2f p(0.0f, (ascent - descent));
+
+			for(uint i = 0; i < textLines.size(); i++){
+				font->Draw(render, p, textLines[i]);
+				p.y += font->lineSkip;
+			}
+			
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			render->SetViewport(vpPos, vpSize);
+			render->SetProjectionMatrix(affProjTmp);
+
+			/*
+			// テキスト描画用ディスプレイリスト
 			if(textListId != -1)
 				render->ReleaseList(textListId);
 			textListId = render->StartList();
@@ -596,6 +645,7 @@ bool Window::Prepare(int mask){
 				p.y += font->lineSkip;
 			}
 			render->EndList();
+			*/
 		}
 
 		SetReady(Item::Text       , true );
@@ -760,7 +810,18 @@ void Window::DrawBack(){
 void Window::DrawContents(){
 	GRRenderIf* render = manager->render;
 
-	render->DrawList(textListId);
+	render->SetTexture2D(true);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, textTexId);
+	glBegin(GL_TRIANGLE_STRIP);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.0f    , szText.y);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(szText.x, szText.y);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.0f    , 0.0f    );
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(szText.x, 0.0f    );
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+	render->SetTexture2D(false);
+	//render->DrawList(textListId);
 }
 
 bool Window::HitTest(Vec2f p, Window** w, int* dmax){
