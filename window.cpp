@@ -605,6 +605,8 @@ bool Window::Prepare(int mask){
 			// フレームバッファにテクスチャをバインド
 			glBindFramebuffer(GL_FRAMEBUFFER, textBufId);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textTexId, 0);
+			// バッファをクリア（しないと以前のテクスチャが残ることがある）
+			glClear(GL_COLOR_BUFFER_BIT);
 
 			// ビューポートと投影変換
 			Vec2f   vpPos  = render->GetViewportPos ();
