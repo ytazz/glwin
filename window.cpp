@@ -589,7 +589,7 @@ bool Window::Prepare(int mask){
 			}
 
 			// テクスチャ作成
-			if(textTexId != 0)
+			if(textTexId != -1)
 				glDeleteTextures(1, (GLuint*)&textTexId);
 			glGenTextures       (1, (GLuint*)&textTexId);
 			glBindTexture  (GL_TEXTURE_2D, textTexId);
@@ -598,7 +598,7 @@ bool Window::Prepare(int mask){
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 			// フレームバッファ作成
-			if(textBufId != 0)
+			if(textBufId != -1)
 				glDeleteFramebuffers(1, (GLuint*)&textBufId);
 			glGenFramebuffers       (1, (GLuint*)&textBufId);
 
