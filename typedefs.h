@@ -15,3 +15,5 @@ using namespace Spr;
 #define USE_FREEGLUT
 #include <GL/glew.h>
 #include <GL/glut.h>
+#undef CreateDialog
+#undef CreateWindow
