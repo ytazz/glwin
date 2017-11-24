@@ -17,3 +17,4 @@ using namespace Spr;
 #include <GL/glut.h>
 #undef CreateDialog
 #undef CreateWindow
+#undef GetObject
