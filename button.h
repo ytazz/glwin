@@ -27,6 +27,8 @@ public:
 	};
 	enum{
 		Clicked = Window::ButtonEventBegin,
+		LatchOn ,
+		LatchOff,
 	};
 
 	int		style;		///< •`‰æƒXƒ^ƒCƒ‹

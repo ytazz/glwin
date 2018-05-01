@@ -49,6 +49,8 @@ void Button::Push(){
 	}
 	else if(latch){
 		onoff = !onoff;
+		if( onoff) Notify(LatchOn );
+		if(!onoff) Notify(LatchOff);
 	}
 	Notify(Clicked);
 }

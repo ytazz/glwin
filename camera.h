@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sbtypes.h>
+#include <glwin/typedefs.h>
 
 #include <sdl.h>
 
@@ -29,6 +29,7 @@ public:
 
 	Window*     owner;
 
+	string      name;
 	int         mode;				///< 投影変換モード
 	float       radius;             ///< 注視対象の半径
 	float       aspect;             ///< スクリーンアスペクト比
@@ -68,6 +69,7 @@ public:
 	Affinef     affProj;
 
 public:
+	void Read   (XMLNode* node);
 	bool OnEvent(SDL_Event* ev);
 	
 	void Limit     (float& v, float rmin, float rmax);
@@ -79,7 +81,9 @@ public:
 	virtual void UpdateView();
 	virtual void UpdateProj();
 
-	Camera();
+	Camera(Window* o);
 };
+
+typedef vector< UTRef<Camera> > CameraRefs;
 
 }

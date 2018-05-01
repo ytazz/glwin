@@ -69,7 +69,7 @@ public:
 	string			dirname;
 
 public:
-	void			Read(XML& xml);
+	void			Read(XMLNode* node);
 	bool			Init();
 	OutlineSet*		Find(string name);
 

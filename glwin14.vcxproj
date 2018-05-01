@@ -157,6 +157,7 @@
     <ClCompile Include="font.cpp" />
     <ClCompile Include="hint.cpp" />
     <ClCompile Include="imageviewer.cpp" />
+    <ClCompile Include="jog.cpp" />
     <ClCompile Include="label.cpp" />
     <ClCompile Include="listbox.cpp" />
     <ClCompile Include="logger.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="glwin.h" />
     <ClInclude Include="hint.h" />
     <ClInclude Include="imageviewer.h" />
+    <ClInclude Include="jog.h" />
     <ClInclude Include="label.h" />
     <ClInclude Include="listbox.h" />
     <ClInclude Include="logger.h" />

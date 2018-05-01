@@ -4,8 +4,10 @@ using namespace Scenebuilder;
 
 namespace GLWin{;
 
-Camera::Camera(){
-	owner   = 0;
+Camera::Camera(Window* o){
+	owner = o;
+	owner->cameras.push_back(this);
+
 	mode    = Projection::Perspective;
 	radius  =  1.0f;
 	aspect  =  1.0f;
@@ -34,6 +36,25 @@ Camera::Camera(){
 	longitude =   0.0f;
 
 	UpdateView();
+}
+
+void Camera::Read(XMLNode* node){
+	node->Get(name     , ".name"     );
+	node->Get(radius   , ".radius"   );
+	node->Get(aspect   , ".aspect"   );
+	node->Get(fov      , ".fov"      );
+	node->Get(latitude , ".latitude" );
+	node->Get(longitude, ".longitude");
+	node->Get(distance , ".distance" );
+	node->Get(distMin  , ".dist_min" );
+	node->Get(distMax  , ".dist_max" );
+	node->Get(target   , ".target"   );
+
+	string str;
+	node->Get(str, "mode");
+	if(str == "perspective") mode = Projection::Perspective;
+	if(str == "ortho"      ) mode = Projection::Ortho;
+
 }
 
 bool Camera::OnEvent(SDL_Event* ev){

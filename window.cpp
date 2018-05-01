@@ -198,6 +198,12 @@ void Window::ReadChild(XMLNode* node){
 		group->Read(node);
 		return;
 	}
+	// Camera
+	if(node->name == "camera"){
+		Camera* camera = new Camera(this);
+		camera->Read(node);
+		return;
+	}
 
 	// typeに応じた子ウィンドウを作成
 	Window* child = manager->CreateWindow(node->name, this);
@@ -842,7 +848,8 @@ bool Window::HitTest(Vec2f p, Window** w, int* dmax){
 }
 
 void Window::AddCallback(WindowCallback* cb){
-	callbacks.push_back(cb);
+	if(find(callbacks.begin(), callbacks.end(), cb) == callbacks.end())
+		callbacks.push_back(cb);
 }
 
 void Window::RemoveCallback(WindowCallback* cb){

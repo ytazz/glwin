@@ -146,10 +146,10 @@ OutlineManager::OutlineManager(){
 	dirname = "drawings/";
 }
 
-void OutlineManager::Read(XML& xml){
+void OutlineManager::Read(XMLNode* node){
 	XMLNode* drawingNode;
 	try{
-		drawingNode = xml.GetRootNode()->GetNode("drawing");
+		drawingNode = node->GetNode("drawing");
 	}
 	catch(XMLException&){ return; }
 

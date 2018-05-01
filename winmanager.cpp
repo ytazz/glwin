@@ -8,6 +8,8 @@
 #include <glwin/switcher.h>
 #include <glwin/textbox.h>
 #include <glwin/tree.h>
+#include <glwin/jog.h>
+#include <glwin/viewer.h>
 
 #include <sbmessage.h>
 using namespace Scenebuilder;
@@ -45,19 +47,18 @@ WindowManager::~WindowManager(){
 	delete outlineManager;
 }
 
-void WindowManager::Read(XML& xml){
-	outlineManager->Read(xml);
+void WindowManager::Read(XMLNode* node){
+	outlineManager->Read(node);
 
-	XMLNode* wmNode = xml.GetRootNode()->GetNode("window_manager", 0, false);
 	XMLNode* rootWinNode = 0;
-	if(wmNode){
-		wmNode->Get(windowPosX  , ".window_pos_x" );
-		wmNode->Get(windowPosY  , ".window_pos_y" );
-		wmNode->Get(windowWidth , ".window_width" );
-		wmNode->Get(windowHeight, ".window_height");
-		wmNode->Get(windowTitle , ".window_title" );
+	if(node){
+		node->Get(windowPosX  , ".window_pos_x" );
+		node->Get(windowPosY  , ".window_pos_y" );
+		node->Get(windowWidth , ".window_width" );
+		node->Get(windowHeight, ".window_height");
+		node->Get(windowTitle , ".window_title" );
 
-		rootWinNode = wmNode->GetNode(0, false);
+		rootWinNode = node->GetNode(0, false);
 	}
 	
 	root = new Window(0);
@@ -255,6 +256,8 @@ Window* WindowManager::CreateWindow(string type, Window* par){
 	if(type == "switcher") return new Switcher(par);
 	if(type == "textbox" ) return new Textbox (par);
 	if(type == "tree"    ) return new TreeView(par);
+	if(type == "jog"     ) return new Jog     (par);
+	if(type == "viewer"  ) return new Viewer  (par);
 
 	return 0;
 }

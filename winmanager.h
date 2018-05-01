@@ -36,7 +36,7 @@ public:
 	int             lastFocusTime;
 
 public:
-	void Read (XML& xml);
+	void Read (XMLNode* node);
 	void Close();
 	
 	/// カーソルの下にあるウィンドウを取得

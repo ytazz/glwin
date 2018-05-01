@@ -4,6 +4,7 @@
 
 #include <glwin/rect.h>
 #include <glwin/radiogroup.h>
+#include <glwin/camera.h>
 
 namespace GLWin{;
 
@@ -53,6 +54,10 @@ public:
 		TreeViewEventEnd = TreeViewEventBegin + 100,
 		SwitcherEventBegin,
 		SwitcherEventEnd = SwitcherEventBegin + 100,
+		JogEventBegin,
+		JogEventEnd = JogEventBegin + 100,
+		ViewerEventBegin,
+		ViewerEventEnd = ViewerEventBegin + 100,
 	};
 	struct Style{
 		enum{
@@ -104,7 +109,8 @@ public:
 	WindowManager*	manager;
 	Window*			parent;
 	WindowRefs		children;
-	RadioGroupRefs  groups;
+	RadioGroupRefs  groups;      ///< radio button groups
+	CameraRefs      cameras;     ///< cameras for viewers
 	
 	vector<WindowCallback*>		callbacks;
 
