@@ -21,6 +21,7 @@ public:
 	virtual void Read        (XMLNode* node);
 	virtual bool Init        ();
 	virtual void DrawContents();
+	virtual bool OnEvent     (SDL_Event* ev);
 	
 	/// ”h¶ƒNƒ‰ƒX‚ªÀ‘•‚·‚é‰¼‘zŠÖ”
 	virtual void DrawView    (){};

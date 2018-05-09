@@ -12,6 +12,23 @@ Jog::Jog(Window* p):Window(p){
 	pos       =  0;
 	stepSmall =  1;
 	stepLarge = 10;
+
+	SetSplit(1, 5);
+	SetColRatio(0, 40.0f);
+	SetColRatio(1, 40.0f);
+	SetColRatio(2, 1.0f);
+	SetColRatio(3, 40.0f);
+	SetColRatio(4, 40.0f);
+
+	btnMinusSmall = new Button(this);
+	btnMinusLarge = new Button(this);
+	btnPlusSmall  = new Button(this);
+	btnPlusLarge  = new Button(this);
+
+	btnMinusSmall->AssignPanel(0, 1);
+	btnMinusLarge->AssignPanel(0, 0);
+	btnPlusSmall ->AssignPanel(0, 3);
+	btnPlusLarge ->AssignPanel(0, 4);
 }
 
 void Jog::Read(XMLNode* node){
@@ -19,11 +36,6 @@ void Jog::Read(XMLNode* node){
 }
 
 bool Jog::Init(){
-	if(!(btnMinusSmall = (Button*)FindChild("btn_minus_small")) ) return false;
-	if(!(btnMinusLarge = (Button*)FindChild("btn_minus_large")) ) return false;
-	if(!(btnPlusSmall  = (Button*)FindChild("btn_plus_small" )) ) return false;
-	if(!(btnPlusLarge  = (Button*)FindChild("btn_plus_large" )) ) return false;
-	
 	btnMinusSmall->SetFontSize(fontSize);
 	btnMinusLarge->SetFontSize(fontSize);
 	btnPlusSmall ->SetFontSize(fontSize);

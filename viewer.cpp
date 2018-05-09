@@ -33,6 +33,10 @@ bool Viewer::Init(){
 	return Window::Init();
 }
 
+bool Viewer::OnEvent(SDL_Event* ev){
+	return curCamera->OnEvent(ev);
+}
+
 void Viewer::DrawContents(){
 	GRRenderIf* render = manager->render;
 
@@ -62,8 +66,8 @@ void Viewer::DrawContents(){
 		render->MultModelMatrix(Affinef::Rot((float)Rad(-90.0), 'x'));
 	}
 
-	render->SetLighting (true);
-	render->SetDepthTest(true);
+	//render->SetLighting (true);
+	//render->SetDepthTest(true);
 	
 	// notify draw event
 	Notify(Viewer::Event::Draw);
