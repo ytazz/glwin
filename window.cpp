@@ -1045,4 +1045,9 @@ void Window::Layout(){
 	}
 }
 
+bool Window::OnUpdate(){
+	Notify(Window::Update);
+	return true;
+}
+
 }

@@ -57,6 +57,18 @@ bool Jog::Init(){
 	return true;
 }
 
+void Jog::SetValue(int val){
+	pos = val;
+	stringstream ss;
+	ss << pos;
+	SetText(ss.str());
+	Notify(Changed);
+}
+
+int Jog::GetValue(){
+	return pos;
+}
+
 /*
 bool Jog::OnUpdate(){
 	pos = (int)boost::math::round(Module::Get()->controller->GetJogPos(index));
@@ -87,7 +99,7 @@ bool Jog::OnEvent(Window* win, int code){
 			matched = true;
 		}
 		if(matched){
-			Notify(Updated);
+			SetValue(pos);
 			//stringstream ss;
 			//ss << "jog " << index << " " << pos;
 			//Module::Get()->reqManager->Query(ss.str());

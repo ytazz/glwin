@@ -34,6 +34,7 @@ public:
 		 FocusOut,
 		 HoverIn,
 		 HoverOut,
+		 Update,
 		 Destroy,
 		WindowEventEnd = WindowEventBegin + 100,
 		ButtonEventBegin,
@@ -310,7 +311,7 @@ public:
 	/// SDLイベント処理
 	virtual bool  OnEvent(SDL_Event* ev){ return false; }
 	/// ワールド情報の更新
-	virtual bool  OnUpdate(){ return true; }
+	virtual bool  OnUpdate();
 	/// アニメーション
 	virtual bool  Step(float dt){ return true; }
 	

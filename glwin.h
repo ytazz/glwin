@@ -6,6 +6,7 @@
 #include <glwin/folder.h>
 #include <glwin/font.h>
 #include <glwin/hint.h>
+#include <glwin/jog.h>
 #include <glwin/label.h>
 #include <glwin/listbox.h>
 #include <glwin/logger.h>

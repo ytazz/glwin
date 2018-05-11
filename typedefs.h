@@ -18,3 +18,4 @@ using namespace Spr;
 #undef CreateDialog
 #undef CreateWindow
 #undef GetObject
+#undef TextOut

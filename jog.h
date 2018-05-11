@@ -8,7 +8,7 @@ namespace GLWin{;
 class Jog : public Window, public WindowCallback{
 public:
 	enum{
-		Updated = Window::JogEventBegin,
+		Changed = Window::JogEventBegin,
 	};
 
 	int     pos;
@@ -21,6 +21,9 @@ public:
 	Button* btnPlusLarge ;
 	
 public:
+	void SetValue(int val);
+	int  GetValue();
+
 	virtual void Read    (XMLNode* node);
 	virtual bool Init    ();
 	//virtual bool OnUpdate();
