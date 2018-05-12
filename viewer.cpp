@@ -54,7 +54,7 @@ void Viewer::DrawContents(){
 	render->SetViewport(Vec2f(posAbs.x, (float)manager->windowHeight - (posAbs.y + szWindow.y)), szWindow);
 	
 	// set camera transformation
-	curCamera->aspect = vpSize.y / vpSize.x;
+	curCamera->aspect = szWindow.y / szWindow.x;
 	curCamera->UpdateView();
 	curCamera->UpdateProj();
 	render->SetViewMatrix      (curCamera->affView.inv());
