@@ -682,6 +682,7 @@ bool Window::Prepare(int mask){
 	
 	// コンテンツ表示位置の計算
 	if((mask & Item::ContentsPos) && !IsReady(Item::ContentsPos)){
+		CalcContentsSize();
 		contentsPos = Vec2f();
 		if(contentsAlign & Align::Left)
 			 contentsPos.x = margin.x;

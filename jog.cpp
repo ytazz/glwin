@@ -13,6 +13,8 @@ Jog::Jog(Window* p):Window(p){
 	stepSmall =  1;
 	stepLarge = 10;
 
+	SetContentsAlign(Align::HCenter | Align::VCenter);
+
 	SetSplit(1, 5);
 	SetColRatio(0, 40.0f);
 	SetColRatio(1, 40.0f);
@@ -29,6 +31,8 @@ Jog::Jog(Window* p):Window(p){
 	btnMinusLarge->AssignPanel(0, 0);
 	btnPlusSmall ->AssignPanel(0, 3);
 	btnPlusLarge ->AssignPanel(0, 4);
+
+	SetValue(pos);
 }
 
 void Jog::Read(XMLNode* node){
@@ -69,16 +73,6 @@ int Jog::GetValue(){
 	return pos;
 }
 
-/*
-bool Jog::OnUpdate(){
-	pos = (int)boost::math::round(Module::Get()->controller->GetJogPos(index));
-	stringstream ss;
-	ss << pos;
-	SetText(ss.str());
-	return true;
-}
-*/
-
 bool Jog::OnEvent(Window* win, int code){
 	if(code == Button::Clicked){
 		bool matched = false;
@@ -100,9 +94,6 @@ bool Jog::OnEvent(Window* win, int code){
 		}
 		if(matched){
 			SetValue(pos);
-			//stringstream ss;
-			//ss << "jog " << index << " " << pos;
-			//Module::Get()->reqManager->Query(ss.str());
 			return true;
 		}
 	}
