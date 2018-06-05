@@ -51,7 +51,7 @@ void Camera::Read(XMLNode* node){
 	node->Get(target   , ".target"   );
 
 	string str;
-	node->Get(str, "mode");
+	node->Get(str, ".mode");
 	if(str == "perspective") mode = Projection::Perspective;
 	if(str == "ortho"      ) mode = Projection::Ortho;
 
