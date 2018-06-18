@@ -17,9 +17,6 @@ using namespace Scenebuilder;
 #include <functional>
 using namespace std::placeholders;
 
-#include <Foundation/UTPreciseTimer.h>
-static UTPreciseTimer ptimer;
-
 namespace GLWin{;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
