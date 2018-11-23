@@ -8,7 +8,7 @@ namespace GLWin{;
 Viewer::Viewer(Window* p):Window(p){
 	SetFrameColor("none");
 	SetBackColor ("none");
-	SetHint(L"ビューワウィンドウです");
+	SetHint("this is a viewer window");
 
 	zUp = true;
 

@@ -2,8 +2,6 @@
 
 #include <glwin/typedefs.h>
 
-#include <sdl.h>
-
 namespace GLWin{;
 
 class Window;

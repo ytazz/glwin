@@ -716,8 +716,8 @@ void Window::Draw(){
 	glDepthMask  (GL_TRUE);
 	glStencilMask(0);
 	
-	// ステンシルマスク設定
-	// ルートウィンドウからこのウィンドウまでのすべてのビットが立っている領域のみ描画可能
+	// set stensil mask
+	// rendered region is defined by taking AND of all stensil masks from the root window down to this window
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_EQUAL, (0x1 << (depth+1))-1, 0xff);
 	

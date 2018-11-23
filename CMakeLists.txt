@@ -4,6 +4,19 @@ project(glwin)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
+set(SPRINGHEAD_DIR "" CACHE PATH "root directory of Springhead")
+set(SCENEBUILDER_DIR "" CACHE PATH "root directory of Scenebuilder")
+set(SDL2_DIR "" CACHE PATH "root directory of SDL2")
+
+set(CMAKE_CXX_FLAGS "-O2 -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-offsetof -Wno-sign-compare -Wno-delete-non-virtual-dtor -Wno-reorder")
+
+include_directories(${PROJECT_SOURCE_DIR}/..)
+include_directories(${SPRINGHEAD_DIR}/core/include)
+include_directories(${SPRINGHEAD_DIR}/core/src)
+include_directories(${SCENEBUILDER_DIR}/include)
+include_directories(${SDL2_DIR})
+
 add_library(glwin
     button.cpp
     camera.cpp

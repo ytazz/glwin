@@ -6,7 +6,7 @@ using namespace Scenebuilder;
 namespace GLWin{;
 
 Console::Console(Window* p):Textbox(p){
-	SetHint(L"ここにコマンドを入力します．↑↓キーで履歴が出ます");
+	SetHint("this is a console window");
 
 	histPos = (int)history.size();
 }

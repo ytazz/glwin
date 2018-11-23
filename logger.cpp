@@ -10,7 +10,7 @@ namespace GLWin{;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 Logger::Logger(Window* p):Window(p){
-	SetHint(L"ÉçÉOÇ™èoÇ‹Ç∑");
+	SetHint("this is a logger window");
 
 	SetFontSize(16);
 	focusable  = false;

@@ -10,7 +10,7 @@ using Scenebuilder::SVG;
 #include <SprGraphics.h>
 using namespace Spr;
 
-#include <sdl.h>
+#include <SDL.h>
 
 #define USE_FREEGLUT
 #include <GL/glew.h>

@@ -25,6 +25,9 @@ public:
 /*
  * ウィンドウ基本クラス
  */
+
+class WindowManager;
+
 class Window : public UTRefCount{
 	friend class WindowManager;
 public:
