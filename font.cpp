@@ -74,16 +74,21 @@ int PowerOfTwo(int x){
 
 bool Font::Init(){
 	// フォントをロード
-	//string fontdir = "fonts/";
-	//string fontdir = "c:\\windows\\fonts\\";
-	string fontdir = "";
-	string path = fontdir + name;
+#if defined _WIN32
 	if( !(font = TTF_OpenFont( name                           .c_str(), size)) &&
 		!(font = TTF_OpenFont( ("fonts\\" + name)             .c_str(), size)) &&
 		!(font = TTF_OpenFont( ("c:\\windows\\fonts\\" + name).c_str(), size)) ){
 		Message::Error("failed to load font %s:%d", name.c_str(), size);
 		return false;
 	}
+#elif defined __unix__
+	if( !(font = TTF_OpenFont( name                           .c_str(), size)) &&
+		!(font = TTF_OpenFont( ("fonts/" + name)             .c_str(), size)) &&
+		!(font = TTF_OpenFont( ("/usr/share/fonts/" + name).c_str(), size)) ){
+		Message::Error("failed to load font %s:%d", name.c_str(), size);
+		return false;
+	}
+#endif
 
 	// 属性取得
 	height   = TTF_FontHeight  (font);
@@ -260,7 +265,11 @@ Font* FontManager::Add(const string& name, int size, const string& color){
 Font* FontManager::Get(const string& name, int size, const string& color){
 	// デフォルトフォントがなければロード
 	if(empty()){
+#if defined _WIN32
 		Add("arial.ttf", 16, "white");
+#elif defined __unix__
+		Add("truetype/dejavu/DejaVuSansMono.ttf", 16, "white");
+#endif
 	}
 
 	// 属性の合致する既存のフォントを探す

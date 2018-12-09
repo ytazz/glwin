@@ -8,8 +8,10 @@ set(SPRINGHEAD_DIR "" CACHE PATH "root directory of Springhead")
 set(SCENEBUILDER_DIR "" CACHE PATH "root directory of Scenebuilder")
 set(SDL2_DIR "" CACHE PATH "root directory of SDL2")
 
-set(CMAKE_CXX_FLAGS "-O2 -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-offsetof -Wno-sign-compare -Wno-delete-non-virtual-dtor -Wno-reorder")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 include_directories(${PROJECT_SOURCE_DIR}/..)
 include_directories(${SPRINGHEAD_DIR}/core/include)
