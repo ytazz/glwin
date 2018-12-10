@@ -263,7 +263,7 @@ Font* FontManager::Add(const string& name, int size, const string& color){
 }
 
 Font* FontManager::Get(const string& name, int size, const string& color){
-	// デフォルトフォントがなければロード
+	// if no font is registered, add default font
 	if(empty()){
 #if defined _WIN32
 		Add("arial.ttf", 16, "white");
@@ -272,19 +272,19 @@ Font* FontManager::Get(const string& name, int size, const string& color){
 #endif
 	}
 
-	// 属性の合致する既存のフォントを探す
+	// find font that matches required attributes
 	for(uint i = 0; i < this->size(); i++){
 		Font* font = at(i);
 		if(font->name == name && font->size == size && font->color == color)
 			return font;
 	}
 
-	// なければ作成
+	// if there is no match, create a new one
 	Font* f = Add(name, size, color);
 	if(f)
 		return f;
 	
-	// デフォルトフォントを返す
+	// if failed to add new one, return default font
 	return at(0);
 }
 
