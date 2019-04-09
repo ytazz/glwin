@@ -22,6 +22,7 @@ endif()
 
 find_package(GLEW)
 find_package(GLUT)
+add_definitions(-DFREEGLUT_LIB_PRAGMAS=0)
 
 include_directories(${PROJECT_SOURCE_DIR}/..)
 include_directories(${SPRINGHEAD_DIR}/core/include)
@@ -48,10 +49,12 @@ set(GLWIN_HEADERS
     messagebox.h
     outline.h
     radiogroup.h
+    rect.h
     scrollbar.h
     switcher.h
     textbox.h
     tree.h
+    typedefs.h
     viewer.h
     window.h
     winmanager.h)
@@ -82,4 +85,4 @@ set(GLWIN_SOURCES
 add_library(glwin ${GLWIN_SOURCES})
 
 install(TARGETS glwin DESTINATION lib)
-install(FILES ${GLWIN_HEADERS} DESTINATION include)
+install(FILES ${GLWIN_HEADERS} DESTINATION include/glwin)
