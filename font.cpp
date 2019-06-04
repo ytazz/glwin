@@ -102,6 +102,7 @@ bool Font::Init(){
 	colorRGB.r = (uint)(255.0 * c[0]);
 	colorRGB.g = (uint)(255.0 * c[1]);
 	colorRGB.b = (uint)(255.0 * c[2]);
+	colorRGB.a = (uint)(255.0);
 
 	return true;
 }
@@ -138,6 +139,7 @@ Font::Glyph* Font::CreateGlyph(wchar_t c){
 
 	// アルファチャンネルもそのままコピーしたいのでper-surface-alphaをオフ
 	//SDL_SetAlpha(image, 0, 0);
+	//SDL_SetSurfaceAlphaMod(image, 255);
 
 	// GLのテクスチャに変換
 	int wtex = PowerOfTwo(image->w);
